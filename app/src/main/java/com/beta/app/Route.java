@@ -142,5 +142,4 @@ public class Route extends Activity
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
-
 }
