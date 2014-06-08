@@ -29,7 +29,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     private static int NONE = 0;
     private static int DRAG = 1;
     private static int ZOOM = 2;
-    private static int DRAG_BALL = 3;
 
     GameThread thread;
     int screenW; //Device's screen width.
@@ -37,16 +36,12 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int ballX; //Ball x position.
     int ballY; //Ball y position.
     int initialY;
-    float dY; //Ball vertical speed.
     int ballW;
     int ballH;
     int bgrW;
     int bgrH;
-    int bgrScroll;
     int dBgrY; //Background scroll speed.
-    float acc;
     Bitmap ball, bgr, bgrReverse;
-    boolean reverseBackgroundFirst;
     boolean ballFingerMove;
 
     //Measure frames per second.
@@ -94,15 +89,8 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         ballW = ball.getWidth();
         ballH = ball.getHeight();
 
-        //Create a flag for the onDraw method to alternate background with its mirror image.
-        reverseBackgroundFirst = false;
-
         //Initialise animation variables.
-        acc = 0.2f; //Acceleration
-        dY = 0; //vertical speed
         initialY = 100; //Initial vertical position
-        bgrScroll = 0;  //Background scroll position
-        dBgrY = 0; //Scrolling background speed
 
         fpsPaint.setTextSize(30);
 
@@ -211,7 +199,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
             case MotionEvent.ACTION_UP:
                 ballFingerMove = false;
-                dY = 0;
                 break;
         }
 
@@ -256,34 +243,10 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
 
         //Draw scrolling background.
-        Rect fromRect1 = new Rect(0, 0, bgrW - bgrScroll, bgrH);
-        Rect toRect1 = new Rect(bgrScroll, 0, bgrW, bgrH);
+        Rect fromRect1 = new Rect(0, 0, bgrW, bgrH);
+        Rect toRect1 = new Rect(0, 0, bgrW, bgrH);
 
-        Rect fromRect2 = new Rect(bgrW - bgrScroll, 0, bgrW, bgrH);
-        Rect toRect2 = new Rect(0, 0, bgrScroll, bgrH);
-
-        if (!reverseBackgroundFirst) {
-            canvas.drawBitmap(bgr, fromRect1, toRect1, null);
-            canvas.drawBitmap(bgrReverse, fromRect2, toRect2, null);
-        } else {
-            canvas.drawBitmap(bgr, fromRect2, toRect2, null);
-            canvas.drawBitmap(bgrReverse, fromRect1, toRect1, null);
-        }
-
-        //Next value for the background's position.
-        if ((bgrScroll += dBgrY) >= bgrW) {
-            bgrScroll = 0;
-            reverseBackgroundFirst = !reverseBackgroundFirst;
-        }
-
-        //Compute roughly the ball's speed and location.
-        if (!ballFingerMove) {
-            ballY += (int) dY; //Increase or decrease vertical position.
-            if (ballY > (screenH - ballH)) {
-                dY = (-1) * dY; //Reverse speed when bottom hit.
-            }
-            dY += acc; //Increase or decrease speed.
-        }
+        canvas.drawBitmap(bgr, fromRect1, toRect1, null);
 
         // draw ball
         canvas.drawBitmap(ball, ballX / scaleFactor, ballY / scaleFactor, null);
