@@ -123,7 +123,8 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         screenW = w;
         screenH = h;
 
-        //bgr = Bitmap.createScaledBitmap(bgr, w, h, true); //Scale background to fit the screen.
+        int ratio = w / bgr.getWidth();
+        bgr = Bitmap.createScaledBitmap(bgr, w, bgr.getHeight() * ratio, true); //Scale background to fit the screen.
         bgrW = bgr.getWidth();
         bgrH = bgr.getHeight();
 
