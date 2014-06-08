@@ -282,11 +282,8 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             dY += acc; //Increase or decrease speed.
         }
 
-        //DRAW BALL
-        float scaledBallX = ballX / scaleFactor;
-        float scaledBallY = ballY / scaleFactor;
-
-        canvas.drawBitmap(ball, scaledBallX, scaledBallY, null);
+        // draw ball
+        canvas.drawBitmap(ball, ballX / scaleFactor, ballY / scaleFactor, null);
         canvas.restore();
 
         //Measure frame rate (unit: frames per second).
