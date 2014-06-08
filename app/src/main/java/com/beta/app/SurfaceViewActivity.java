@@ -286,9 +286,8 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         float scaledBallX = ballX / scaleFactor;
         float scaledBallY = ballY / scaleFactor;
 
-        canvas.save(); //Save the position of the canvas matrix.
-        canvas.drawBitmap(ball, scaledBallX, scaledBallY, null); //Draw the ball by applying the canvas rotated matrix.
-        canvas.restore(); //Rotate the canvas matrix back to its saved position - only the ball bitmap was rotated not all canvas.
+        canvas.drawBitmap(ball, scaledBallX, scaledBallY, null);
+        canvas.restore();
 
         //Measure frame rate (unit: frames per second).
         now = System.currentTimeMillis();
