@@ -150,8 +150,10 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_MOVE:
                 // Mode is already set to DRAG
                 // Finger movement
-                translateX = event.getX() - startX;
-                translateY = event.getY() - startY;
+                if (event.getPointerCount() == 2) {
+                    translateX = event.getX() - startX;
+                    translateY = event.getY() - startY;
+                }
 
                 //We cannot use startX and startY directly because we have adjusted their values using the previous translation values.
                 //This is why we need to add those values to startX and startY so that we can get the actual coordinates of the finger.
@@ -200,9 +202,10 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             }
 
             case MotionEvent.ACTION_MOVE: {
-                ballX = (int) event.getX() - ballW / 2;
-                ballY = (int) event.getY() - ballH / 2;
-
+                if (event.getPointerCount() == 1) {
+                    ballX = (int) event.getX() - ballW / 2;
+                    ballY = (int) event.getY() - ballH / 2;
+                }
                 break;
             }
 
