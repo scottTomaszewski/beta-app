@@ -33,7 +33,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
     GameThread thread;
     int screenW; //Device's screen width.
-    int screenH; //Devices's screen height.
+    int screenH; //Device's screen height.
     int ballX; //Ball x position.
     int ballY; //Ball y position.
     int initialY;
@@ -42,12 +42,11 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int ballH;
     int bgrW;
     int bgrH;
-    int angle;
     int bgrScroll;
     int dBgrY; //Background scroll speed.
     float acc;
     Bitmap ball, bgr, bgrReverse;
-    boolean reverseBackroundFirst;
+    boolean reverseBackgroundFirst;
     boolean ballFingerMove;
 
     //Measure frames per second.
@@ -59,7 +58,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
     //Frame speed
     long timeNow;
-    long timePrev = 0;
     long timePrevFrame = 0;
     long timeDelta;
 
@@ -97,13 +95,12 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         ballH = ball.getHeight();
 
         //Create a flag for the onDraw method to alternate background with its mirror image.
-        reverseBackroundFirst = false;
+        reverseBackgroundFirst = false;
 
         //Initialise animation variables.
         acc = 0.2f; //Acceleration
         dY = 0; //vertical speed
         initialY = 100; //Initial vertical position
-        angle = 0; //Start value for the rotation angle
         bgrScroll = 0;  //Background scroll position
         dBgrY = 0; //Scrolling background speed
 
@@ -262,7 +259,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         Rect fromRect2 = new Rect(bgrW - bgrScroll, 0, bgrW, bgrH);
         Rect toRect2 = new Rect(0, 0, bgrScroll, bgrH);
 
-        if (!reverseBackroundFirst) {
+        if (!reverseBackgroundFirst) {
             canvas.drawBitmap(bgr, fromRect1, toRect1, null);
             canvas.drawBitmap(bgrReverse, fromRect2, toRect2, null);
         } else {
@@ -273,7 +270,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         //Next value for the background's position.
         if ((bgrScroll += dBgrY) >= bgrW) {
             bgrScroll = 0;
-            reverseBackroundFirst = !reverseBackroundFirst;
+            reverseBackgroundFirst = !reverseBackgroundFirst;
         }
 
         //Compute roughly the ball's speed and location.
@@ -285,29 +282,13 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             dY += acc; //Increase or decrease speed.
         }
 
-        //Increase rotating angle
-        if (angle++ > 360)
-            angle = 0;
-
         //DRAW BALL
-        //Rotate method one
-        /*
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle, (ballW / 2), (ballH / 2)); //Rotate it.
-        matrix.postTranslate(ballX, ballY); //Move it into x, y position.
-        canvas.drawBitmap(ball, matrix, null); //Draw the ball with applied matrix.
-
-        */// Rotate method two
-
         float scaledBallX = ballX / scaleFactor;
         float scaledBallY = ballY / scaleFactor;
 
         canvas.save(); //Save the position of the canvas matrix.
-        canvas.rotate(angle, scaledBallX + (ballW / 2), scaledBallY + (ballH / 2)); //Rotate the canvas matrix.
         canvas.drawBitmap(ball, scaledBallX, scaledBallY, null); //Draw the ball by applying the canvas rotated matrix.
         canvas.restore(); //Rotate the canvas matrix back to its saved position - only the ball bitmap was rotated not all canvas.
-
-        //*/
 
         //Measure frame rate (unit: frames per second).
         now = System.currentTimeMillis();
@@ -358,10 +339,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
         public void setRunning(boolean run) {
             this.run = run;
-        }
-
-        public SurfaceHolder getSurfaceHolder() {
-            return surfaceHolder;
         }
 
         @Override
