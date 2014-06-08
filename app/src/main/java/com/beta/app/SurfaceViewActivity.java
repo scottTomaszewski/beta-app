@@ -301,7 +301,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
         canvas.save(); //Save the position of the canvas matrix.
         canvas.rotate(angle, ballX + (ballW / 2), ballY + (ballH / 2)); //Rotate the canvas matrix.
-        canvas.drawBitmap(ball, ballX, ballY, null); //Draw the ball by applying the canvas rotated matrix.
+        canvas.drawBitmap(ball, ballX / scaleFactor, ballY / scaleFactor, null); //Draw the ball by applying the canvas rotated matrix.
         canvas.restore(); //Rotate the canvas matrix back to its saved position - only the ball bitmap was rotated not all canvas.
 
         //*/
