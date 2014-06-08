@@ -194,8 +194,8 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         detector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
-                ballX = (int) event.getX() - ballW / 2;
-                ballY = (int) event.getY() - ballH / 2;
+                ballX = (int) (event.getX() - previousTranslateX) - ballW / 2;
+                ballY = (int) (event.getY() - previousTranslateY) - ballH / 2;
 
                 ballFingerMove = true;
                 break;
@@ -203,8 +203,8 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
             case MotionEvent.ACTION_MOVE: {
                 if (event.getPointerCount() == 1) {
-                    ballX = (int) event.getX() - ballW / 2;
-                    ballY = (int) event.getY() - ballH / 2;
+                    ballX = (int) (event.getX() - previousTranslateX) - ballW / 2;
+                    ballY = (int) (event.getY() - previousTranslateY) - ballH / 2;
                 }
                 break;
             }
