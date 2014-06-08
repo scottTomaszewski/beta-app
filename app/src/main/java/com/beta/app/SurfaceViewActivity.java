@@ -241,12 +241,9 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         // perform panning of image taking into account zoom
         canvas.translate(translateX / scaleFactor, translateY / scaleFactor);
 
-
-        //Draw scrolling background.
-        Rect fromRect1 = new Rect(0, 0, bgrW, bgrH);
-        Rect toRect1 = new Rect(0, 0, bgrW, bgrH);
-
-        canvas.drawBitmap(bgr, fromRect1, toRect1, null);
+        //Draw background
+        Rect r = new Rect(0, 0, bgrW, bgrH);
+        canvas.drawBitmap(bgr, r, r, null);
 
         // draw ball
         canvas.drawBitmap(ball, ballX / scaleFactor, ballY / scaleFactor, null);
