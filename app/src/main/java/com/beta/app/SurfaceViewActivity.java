@@ -162,7 +162,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                                 Math.pow(event.getY() - (startY + previousTranslateY), 2)
                 );
 
-                if(distance > 0) {
+                if (distance > 0) {
                     dragged = true;
                 }
 
@@ -232,22 +232,22 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         canvas.scale(scaleFactor, scaleFactor);
 
         // avoid panning past last bound
-        if((translateX * -1) < 0) {
+        if ((translateX * -1) < 0) {
             translateX = 0;
         }
 
         // avoid panning past right bound
-        else if((translateX * -1) > (scaleFactor - 1) * bgrW) {
+        else if ((translateX * -1) > (scaleFactor - 1) * bgrW) {
             translateX = (1 - scaleFactor) * bgrW;
         }
 
         // avoid panning past top bound
-        if(translateY * -1 < 0) {
+        if (translateY * -1 < 0) {
             translateY = 0;
         }
 
         // avoid panning past bottom bound
-        else if((translateY * -1) > (scaleFactor - 1) * bgrH) {
+        else if ((translateY * -1) > (scaleFactor - 1) * bgrH) {
             translateY = (1 - scaleFactor) * bgrH;
         }
 
