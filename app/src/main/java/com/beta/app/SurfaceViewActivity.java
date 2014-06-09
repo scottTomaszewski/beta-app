@@ -303,9 +303,9 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 //limit frame rate to max 60fps
                 timeNow = System.currentTimeMillis();
                 timeDelta = timeNow - timePrevFrame;
-                if (timeDelta < 16) {
+                if (timeDelta < 32) {
                     try {
-                        Thread.sleep(16 - timeDelta);
+                        Thread.sleep(32 - timeDelta);
                     } catch (InterruptedException e) {
 
                     }
