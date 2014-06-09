@@ -196,7 +196,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                         ballX = (int) adjustedX - ballRadius;
                         ballY = (int) adjustedY - ballRadius;
                     }
-                    for(Limb l : body.all) {
+                    for (Limb l : body.all) {
                         if (l.containsPoints(adjustedX, adjustedY)) {
                             l.setX((int) adjustedX - ballRadius);
                             l.setY((int) adjustedY - ballRadius);
@@ -263,7 +263,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
         // draw limbs
         for (Limb l : body) {
-            canvas.drawCircle(l.posX/scaleFactor, l.posY/scaleFactor, l.radius, l.color);
+            canvas.drawCircle(l.posX / scaleFactor, l.posY / scaleFactor, l.radius, l.color);
         }
 
         canvas.restore();
