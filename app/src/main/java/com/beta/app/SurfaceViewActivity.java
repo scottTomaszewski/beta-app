@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -235,9 +236,11 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         // perform panning of image taking into account zoom
         canvas.translate(translateX / scaleFactor, translateY / scaleFactor);
 
+        canvas.drawColor(Color.BLACK);
         //Draw background
         Rect r = new Rect(0, 0, bgrW, bgrH);
         canvas.drawBitmap(bgr, r, r, null);
+
 
         // draw ball
         canvas.drawBitmap(ball, ballX / scaleFactor, ballY / scaleFactor, null);
