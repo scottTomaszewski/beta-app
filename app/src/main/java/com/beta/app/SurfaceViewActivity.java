@@ -14,6 +14,9 @@ import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class SurfaceViewActivity extends Activity {
     BallBounces ball;
 
@@ -26,9 +29,10 @@ public class SurfaceViewActivity extends Activity {
 }
 
 class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
-    private static int NONE = 0;
-    private static int DRAG = 1;
-    private static int ZOOM = 2;
+    private static final int NONE = 0;
+    private static final int DRAG = 1;
+    private static final int ZOOM = 2;
+    private static final int ballRadius = 20;
 
     GameThread thread;
     int screenW; //Device's screen width.
@@ -36,11 +40,11 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int ballX; //Ball x position.
     int ballY; //Ball y position.
     int initialY;
-    int ballRadius = 20;
     int bgrW;
     int bgrH;
     Bitmap bgr;
     boolean ballFingerMove;
+
 
     //Measure frames per second.
     long now;
@@ -79,6 +83,8 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     //panned.
     private float previousTranslateX = 0f;
     private float previousTranslateY = 0f;
+
+    private final Climber body = Climber.standard();
 
     public BallBounces(Context context) {
         super(context);
@@ -181,14 +187,20 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
             case MotionEvent.ACTION_MOVE: {
                 if (event.getPointerCount() == 1) {
-                    float adjustedX = event.getX();
-                    float adjustedY = event.getY();
+                    float adjustedX = (event.getX() - translateX) - ballRadius;
+                    float adjustedY = (event.getY() - translateY) - ballRadius;
                     if (adjustedX <= ballX + ballRadius
                             && adjustedX >= ballX - ballRadius
                             && adjustedY <= ballY + ballRadius
                             && adjustedY >= ballY - ballRadius) {
                         ballX = (int) adjustedX - ballRadius;
                         ballY = (int) adjustedY - ballRadius;
+                    }
+                    for(Limb l : body.all) {
+                        if (l.containsPoints(adjustedX, adjustedY)) {
+                            l.setX((int) adjustedX - ballRadius);
+                            l.setY((int) adjustedY - ballRadius);
+                        }
                     }
                 }
                 break;
@@ -245,7 +257,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
         // draw ball
         Paint translucent = new Paint();
-        translucent.setColor(Color.BLUE);
+        translucent.setColor(Color.BLACK);
         translucent.setAlpha(90);
         canvas.drawCircle(ballX / scaleFactor, ballY / scaleFactor, ballRadius, translucent);
         canvas.restore();
@@ -364,6 +376,54 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
         void setY(int y) {
             this.posY = y;
+        }
+
+        boolean containsPoints(float x, float y) {
+            return x <= posX + ballRadius && x >= posX - ballRadius
+                    && y <= posY + ballRadius && y >= posY - ballRadius;
+
+        }
+    }
+
+    private static final class Climber {
+        final Limb leftHand;
+        final Limb rightHand;
+        final Limb leftFoot;
+        final Limb rightFoot;
+        final List<Limb> all;
+
+        private Climber(Limb leftHand, Limb rightHand, Limb leftFoot, Limb rightFoot) {
+            this.leftHand = leftHand;
+            this.rightHand = rightHand;
+            this.leftFoot = leftFoot;
+            this.rightFoot = rightFoot;
+            all = Arrays.asList(leftHand, rightHand, leftFoot, rightFoot);
+        }
+
+        static Climber standard() {
+            // left hand
+            Paint lH = new Paint();
+            lH.setColor(Color.RED);
+            lH.setAlpha(90);
+            // right hand
+            Paint rH = new Paint();
+            rH.setColor(Color.BLUE);
+            rH.setAlpha(90);
+            // left foot
+            Paint lF = new Paint();
+            lF.setColor(Color.YELLOW);
+            lF.setAlpha(90);
+            // right foot
+            Paint rF = new Paint();
+            rF.setColor(Color.GREEN);
+            rF.setAlpha(90);
+
+            return new Climber(
+                    new Limb(ballRadius, lH, ballRadius * 1, ballRadius),
+                    new Limb(ballRadius, rH, ballRadius * 2, ballRadius),
+                    new Limb(ballRadius, lF, ballRadius * 3, ballRadius),
+                    new Limb(ballRadius, rF, ballRadius * 4, ballRadius)
+            );
         }
     }
 }
