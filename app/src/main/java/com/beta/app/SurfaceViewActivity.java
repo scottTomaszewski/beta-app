@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -37,8 +36,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int ballX; //Ball x position.
     int ballY; //Ball y position.
     int initialY;
-    int ballW;
-    int ballH;
+    int ballRadius = 20;
     int bgrW;
     int bgrH;
     Bitmap ball, bgr;
@@ -84,10 +82,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
     public BallBounces(Context context) {
         super(context);
-        ball = BitmapFactory.decodeResource(getResources(), R.drawable.football); //Load a ball image.
         bgr = BitmapFactory.decodeResource(getResources(), R.drawable.wall1); //Load a background.
-        ballW = ball.getWidth();
-        ballH = ball.getHeight();
 
         //Initialise animation variables.
         initialY = 100; //Initial vertical position
@@ -113,7 +108,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         bgrW = bgr.getWidth();
         bgrH = bgr.getHeight();
 
-        ballX = (int) (screenW / 2) - (ballW / 2); //Centre ball X into the centre of the screen.
+        ballX = (int) (screenW / 2) - ballRadius; //Centre ball X into the centre of the screen.
         ballY = -50; //Centre ball height above the screen.
     }
 
@@ -177,8 +172,8 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         detector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
-                ballX = (int) (event.getX() - previousTranslateX) - ballW / 2;
-                ballY = (int) (event.getY() - previousTranslateY) - ballH / 2;
+                ballX = (int) (event.getX() - translateX) - ballRadius;
+                ballY = (int) (event.getY() - translateY) - ballRadius;
 
                 ballFingerMove = true;
                 break;
@@ -186,8 +181,8 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
             case MotionEvent.ACTION_MOVE: {
                 if (event.getPointerCount() == 1) {
-                    ballX = (int) (event.getX() - previousTranslateX) - ballW / 2;
-                    ballY = (int) (event.getY() - previousTranslateY) - ballH / 2;
+                    ballX = (int) (event.getX() - translateX) - ballRadius;
+                    ballY = (int) (event.getY() - translateY) - ballRadius;
                 }
                 break;
             }
@@ -236,14 +231,16 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         // perform panning of image taking into account zoom
         canvas.translate(translateX / scaleFactor, translateY / scaleFactor);
 
-        canvas.drawColor(Color.BLACK);
         //Draw background
+        canvas.drawColor(Color.BLACK);
         Rect r = new Rect(0, 0, bgrW, bgrH);
         canvas.drawBitmap(bgr, r, r, null);
 
-
         // draw ball
-        canvas.drawBitmap(ball, ballX / scaleFactor, ballY / scaleFactor, null);
+        Paint translucent = new Paint();
+        translucent.setColor(Color.BLUE);
+        translucent.setAlpha(90);
+        canvas.drawCircle(ballX / scaleFactor, ballY / scaleFactor, ballRadius, translucent);
         canvas.restore();
 
         //Measure frame rate (unit: frames per second).
