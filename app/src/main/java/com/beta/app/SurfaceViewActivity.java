@@ -40,8 +40,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int ballH;
     int bgrW;
     int bgrH;
-    int dBgrY; //Background scroll speed.
-    Bitmap ball, bgr, bgrReverse;
+    Bitmap ball, bgr;
     boolean ballFingerMove;
 
     //Measure frames per second.
@@ -112,11 +111,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         bgr = Bitmap.createScaledBitmap(bgr, w, bgr.getHeight() * ratio, true); //Scale background to fit the screen.
         bgrW = bgr.getWidth();
         bgrH = bgr.getHeight();
-
-        //Create a mirror image of the background (horizontal flip) - for a more circular background.
-        Matrix matrix = new Matrix();  //Like a frame or mould for an image.
-        matrix.setScale(-1, 1); //Horizontal mirror effect.
-        bgrReverse = Bitmap.createBitmap(bgr, 0, 0, bgrW, bgrH, matrix, true); //Create a new mirrored bitmap by applying the matrix.
 
         ballX = (int) (screenW / 2) - (ballW / 2); //Centre ball X into the centre of the screen.
         ballY = -50; //Centre ball height above the screen.
