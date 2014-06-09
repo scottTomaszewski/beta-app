@@ -181,8 +181,15 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
             case MotionEvent.ACTION_MOVE: {
                 if (event.getPointerCount() == 1) {
-                    ballX = (int) (event.getX() - translateX) - ballRadius;
-                    ballY = (int) (event.getY() - translateY) - ballRadius;
+                    float adjustedX = event.getX();
+                    float adjustedY = event.getY();
+                    if (adjustedX <= ballX + ballRadius
+                            && adjustedX >= ballX - ballRadius
+                            && adjustedY <= ballY + ballRadius
+                            && adjustedY >= ballY - ballRadius) {
+                        ballX = (int) adjustedX - ballRadius;
+                        ballY = (int) adjustedY - ballRadius;
+                    }
                 }
                 break;
             }
@@ -333,6 +340,30 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             scaleFactor *= detector.getScaleFactor();
             scaleFactor = Math.max(MIN_ZOOM, Math.min(scaleFactor, MAX_ZOOM));
             return true;
+        }
+    }
+
+    private static final class Limb {
+        final int radius;
+        final Paint color;
+
+        // position is mutable so it can move
+        private int posX;
+        private int posY;
+
+        private Limb(int radius, Paint color, int posX, int posY) {
+            this.radius = radius;
+            this.color = color;
+            this.posX = posX;
+            this.posY = posY;
+        }
+
+        void setX(int x) {
+            this.posX = x;
+        }
+
+        void setY(int y) {
+            this.posY = y;
         }
     }
 }
