@@ -260,6 +260,12 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         translucent.setColor(Color.BLACK);
         translucent.setAlpha(90);
         canvas.drawCircle(ballX / scaleFactor, ballY / scaleFactor, ballRadius, translucent);
+
+        // draw limbs
+        for (Limb l : body) {
+            canvas.drawCircle(l.posX/scaleFactor, l.posY/scaleFactor, l.radius, l.color);
+        }
+
         canvas.restore();
 
         //Measure frame rate (unit: frames per second).
