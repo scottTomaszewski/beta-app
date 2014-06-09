@@ -39,7 +39,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int ballRadius = 20;
     int bgrW;
     int bgrH;
-    Bitmap ball, bgr;
+    Bitmap bgr;
     boolean ballFingerMove;
 
     //Measure frames per second.
