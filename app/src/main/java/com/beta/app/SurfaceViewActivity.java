@@ -118,9 +118,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         ballY = -50; //Centre ball height above the screen.
     }
 
-    //***************************************
-    //*************  TOUCH  *****************
-    //***************************************
     @Override
     public synchronized boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction() & MotionEvent.ACTION_MASK) {
