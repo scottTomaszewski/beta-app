@@ -51,6 +51,12 @@ public class SurfaceViewActivity extends Activity {
                 ball.setState(history.back());
             }
         });
+        buttons.findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ball.setState(history.next());
+            }
+        });
         layout.addView(buttons);
         setContentView(layout);
     }
