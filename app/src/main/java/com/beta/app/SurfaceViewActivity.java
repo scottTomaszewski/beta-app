@@ -98,13 +98,20 @@ class Body {
 }
 
 class History {
-    private final List<Body> positions = new ArrayList<>();
+    private final List<Body> positions = new ArrayList<>(Arrays.asList(Body.fromClimber(Climber.standard())));
 
     private int currIndex = 0;
+    private int top = currIndex;
 
     void push(Body nextMove) {
-        positions.add(nextMove);
-        currIndex = positions.size()-1;
+        if (top == currIndex) {
+            positions.add(nextMove);
+            currIndex++;
+            top++;
+        } else {
+            currIndex++;
+            positions.set(currIndex, nextMove);
+        }
     }
 
     Body back() {
@@ -116,11 +123,11 @@ class History {
     }
 
     Body next() {
-        if (currIndex != positions.size()-1) {
+        if (currIndex != top) {
             currIndex++;
             return positions.get(currIndex);
         }
-        return positions.get(positions.size()-1);
+        return positions.get(currIndex);
     }
 }
 
