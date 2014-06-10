@@ -62,75 +62,6 @@ public class SurfaceViewActivity extends Activity {
     }
 }
 
-class Position {
-    final int x;
-    final int y;
-
-    Position(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-}
-
-class Body {
-    final Position leftHand;
-    final Position rightHand;
-    final Position leftFoot;
-    final Position rightFoot;
-    final List<Position> all;
-
-    static Body fromClimber(Climber c) {
-        return new Body(
-                new Position(c.leftHand.posX, c.leftHand.posY),
-                new Position(c.rightHand.posX, c.rightHand.posY),
-                new Position(c.leftFoot.posX, c.leftFoot.posY),
-                new Position(c.rightFoot.posX, c.rightFoot.posY)
-        );
-    }
-
-    Body(Position leftHand, Position rightHand, Position leftFoot, Position rightFoot) {
-        this.leftHand = leftHand;
-        this.rightHand = rightHand;
-        this.leftFoot = leftFoot;
-        this.rightFoot = rightFoot;
-        this.all = Arrays.asList(leftHand, rightHand, leftFoot, rightFoot);
-    }
-}
-
-class History {
-    private final List<Body> positions = new ArrayList<>(Arrays.asList(Body.fromClimber(Climber.standard())));
-
-    private int currIndex = 0;
-    private int top = currIndex;
-
-    void push(Body nextMove) {
-        if (top == currIndex) {
-            positions.add(nextMove);
-            currIndex++;
-            top++;
-        } else {
-            currIndex++;
-            positions.set(currIndex, nextMove);
-        }
-    }
-
-    Body back() {
-        if (currIndex != 0) {
-            currIndex--;
-            return positions.get(currIndex);
-        }
-        return positions.get(0);
-    }
-
-    Body next() {
-        if (currIndex != top) {
-            currIndex++;
-            return positions.get(currIndex);
-        }
-        return positions.get(currIndex);
-    }
-}
-
 class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     private static final int NONE = 0;
     private static final int DRAG = 1;
@@ -577,4 +508,74 @@ class LimbHelper implements View.OnClickListener {
 
 enum LimbEnum {
     LEFT_HAND, RIGHT_HAND, LEFT_FOOT, RIGHT_FOOT, NONE;
+}
+
+
+class Position {
+    final int x;
+    final int y;
+
+    Position(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class Body {
+    final Position leftHand;
+    final Position rightHand;
+    final Position leftFoot;
+    final Position rightFoot;
+    final List<Position> all;
+
+    static Body fromClimber(Climber c) {
+        return new Body(
+                new Position(c.leftHand.posX, c.leftHand.posY),
+                new Position(c.rightHand.posX, c.rightHand.posY),
+                new Position(c.leftFoot.posX, c.leftFoot.posY),
+                new Position(c.rightFoot.posX, c.rightFoot.posY)
+        );
+    }
+
+    Body(Position leftHand, Position rightHand, Position leftFoot, Position rightFoot) {
+        this.leftHand = leftHand;
+        this.rightHand = rightHand;
+        this.leftFoot = leftFoot;
+        this.rightFoot = rightFoot;
+        this.all = Arrays.asList(leftHand, rightHand, leftFoot, rightFoot);
+    }
+}
+
+class History {
+    private final List<Body> positions = new ArrayList<>(Arrays.asList(Body.fromClimber(Climber.standard())));
+
+    private int currIndex = 0;
+    private int top = currIndex;
+
+    void push(Body nextMove) {
+        if (top == currIndex) {
+            positions.add(nextMove);
+            currIndex++;
+            top++;
+        } else {
+            currIndex++;
+            positions.set(currIndex, nextMove);
+        }
+    }
+
+    Body back() {
+        if (currIndex != 0) {
+            currIndex--;
+            return positions.get(currIndex);
+        }
+        return positions.get(0);
+    }
+
+    Body next() {
+        if (currIndex != top) {
+            currIndex++;
+            return positions.get(currIndex);
+        }
+        return positions.get(currIndex);
+    }
 }
