@@ -187,9 +187,9 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 }
 
                 for (Limb l : body.all) {
-                    if (l.containsPoints(adjustedX, adjustedY)) {
-                        l.setX((int) adjustedX);
-                        l.setY((int) adjustedY);
+                    if (l.containsPoints(adjustedX/scaleFactor, adjustedY/scaleFactor)) {
+                        l.setX((int) (adjustedX/scaleFactor));
+                        l.setY((int) (adjustedY/scaleFactor));
                     }
                 }
 
@@ -209,9 +209,9 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                         ballY = (int) adjustedY;
                     }
                     for (Limb l : body.all) {
-                        if (l.containsPoints(adjustedX, adjustedY)) {
-                            l.setX((int) adjustedX);
-                            l.setY((int) adjustedY);
+                        if (l.containsPoints(adjustedX/scaleFactor, adjustedY/scaleFactor)) {
+                            l.setX((int) (adjustedX/scaleFactor));
+                            l.setY((int) (adjustedY/scaleFactor));
                         }
                     }
                 }
@@ -438,9 +438,9 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
             return new Climber(
                     new Limb(ballRadius, lH, ballRadius * 2, ballRadius*2),
-                    new Limb(ballRadius, rH, ballRadius * 3, ballRadius*2),
-                    new Limb(ballRadius, lF, ballRadius * 4, ballRadius*2),
-                    new Limb(ballRadius, rF, ballRadius * 5, ballRadius*2)
+                    new Limb(ballRadius, rH, ballRadius * 6, ballRadius*2),
+                    new Limb(ballRadius, lF, ballRadius * 8, ballRadius*2),
+                    new Limb(ballRadius, rF, ballRadius * 10, ballRadius*2)
             );
         }
     }
