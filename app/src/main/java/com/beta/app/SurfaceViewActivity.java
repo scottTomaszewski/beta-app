@@ -32,7 +32,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     private static final int NONE = 0;
     private static final int DRAG = 1;
     private static final int ZOOM = 2;
-    private static final int ballRadius = 40;
+    private static final int ballRadius = 20;
 
     GameThread thread;
     int screenW; //Device's screen width.
@@ -285,7 +285,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 thread.join();
                 retry = false;
             } catch (InterruptedException e) {
-
             }
         }
     }
