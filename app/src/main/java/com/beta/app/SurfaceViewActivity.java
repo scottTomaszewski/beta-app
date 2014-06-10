@@ -52,7 +52,11 @@ class LimbHelper implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
-        route.setLimbSelected(l);
+        if (route.selectedLimb == l) {
+            route.selectedLimb = LimbEnum.NONE;
+        } else {
+            route.selectedLimb = l;
+        }
     }
 }
 
@@ -112,7 +116,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
     private final Climber body = Climber.standard();
 
-    private LimbEnum selectedLimb;
+    LimbEnum selectedLimb;
 
     public BallBounces(Context context) {
         super(context);
@@ -324,11 +328,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
-
-    void setLimbSelected(LimbEnum toSet) {
-        selectedLimb = toSet;
-    }
-
 
     class GameThread extends Thread {
         private SurfaceHolder surfaceHolder;
