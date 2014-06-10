@@ -142,6 +142,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 // Mode is already set to DRAG
                 // Finger movement
                 if (event.getPointerCount() == 2) {
+                    // panning
                     translateX = event.getX() - startX;
                     translateY = event.getY() - startY;
                 }
@@ -191,6 +192,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 for (Limb l : body.all) {
                     if (l.containsPoints(adjustedX / scaleFactor, adjustedY / scaleFactor)
                             || l.id == selectedLimb) {
+                        selectedLimb = l.id;
                         l.setX((int) (adjustedX / scaleFactor));
                         l.setY((int) (adjustedY / scaleFactor));
                     }
