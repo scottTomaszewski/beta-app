@@ -14,7 +14,10 @@
         android:text="L Foot"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:textSize="24dp" />
+        android:textSize="24dp"
+        android:alpha=".8"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp" />
 
     <Button
         android:id="@+id/rightFoot"
@@ -25,7 +28,10 @@
         android:textSize="24dp"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="R Foot" />
+        android:text="R Foot"
+        android:alpha=".8"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp" />
 
     <Button
         android:id="@+id/leftHand"
@@ -36,7 +42,10 @@
         android:background="@android:color/holo_red_light"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
-        android:text="L Hand" />
+        android:text="L Hand"
+        android:alpha=".8"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp" />
 
     <Button
         android:id="@+id/rightHand"
@@ -47,6 +56,9 @@
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:text="R Hand"
-        android:background="@android:color/holo_blue_dark" />
+        android:background="@android:color/holo_blue_dark"
+        android:alpha=".8"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp" />
 
 </LinearLayout>
