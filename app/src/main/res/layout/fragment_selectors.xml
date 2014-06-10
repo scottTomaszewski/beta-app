@@ -10,7 +10,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="L Foot" />
+        android:background="#fff4ff10"
+        android:text="L Foot"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textSize="24dp" />
 
     <Button
         android:id="@+id/rightFoot"
@@ -18,6 +22,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
+        android:background="@android:color/holo_green_dark"
+        android:textSize="24dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:text="R Foot" />
 
     <Button
@@ -26,6 +34,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
+        android:textSize="24dp"
+        android:background="@android:color/holo_red_light"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:text="L Hand" />
 
     <Button
@@ -34,6 +46,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
-        android:text="R Hand" />
+        android:textSize="24dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="R Hand"
+        android:background="@android:color/holo_blue_dark" />
 
 </LinearLayout>

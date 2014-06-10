@@ -417,10 +417,10 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             rF.setAlpha(90);
 
             return new Climber(
-                    new Limb(ballRadius, lH, ballRadius * 4, ballRadius*2),
-                    new Limb(ballRadius, rH, ballRadius * 6, ballRadius*2),
-                    new Limb(ballRadius, lF, ballRadius * 8, ballRadius*2),
-                    new Limb(ballRadius, rF, ballRadius * 10, ballRadius*2)
+                    new Limb(ballRadius, lH, ballRadius * 8, ballRadius*2),
+                    new Limb(ballRadius, rH, ballRadius * 10, ballRadius*2),
+                    new Limb(ballRadius, lF, ballRadius * 4, ballRadius*2),
+                    new Limb(ballRadius, rF, ballRadius * 6, ballRadius*2)
             );
         }
     }
