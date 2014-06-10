@@ -32,7 +32,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     private static final int NONE = 0;
     private static final int DRAG = 1;
     private static final int ZOOM = 2;
-    private static final int ballRadius = 20;
+    private static final int ballRadius = 40;
 
     GameThread thread;
     int screenW; //Device's screen width.
@@ -115,7 +115,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         bgrH = bgr.getHeight();
 
         ballX = (int) (screenW / 2) - ballRadius; //Centre ball X into the centre of the screen.
-        ballY = -50; //Centre ball height above the screen.
+        ballY = 50; //Centre ball height above the screen.
     }
 
     @Override
@@ -175,8 +175,23 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         detector.onTouchEvent(event);
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN: {
-                ballX = (int) (event.getX() - translateX) - ballRadius;
-                ballY = (int) (event.getY() - translateY) - ballRadius;
+                float adjustedX = event.getX() - previousTranslateX - ballRadius;
+                float adjustedY = event.getY() - previousTranslateY - ballRadius;
+
+                if (adjustedX <= ballX + ballRadius
+                        && adjustedX >= ballX - ballRadius
+                        && adjustedY <= ballY + ballRadius
+                        && adjustedY >= ballY - ballRadius) {
+                    ballX = (int) adjustedX;
+                    ballY = (int) adjustedY;
+                }
+
+                for (Limb l : body.all) {
+                    if (l.containsPoints(adjustedX, adjustedY)) {
+                        l.setX((int) adjustedX);
+                        l.setY((int) adjustedY);
+                    }
+                }
 
                 ballFingerMove = true;
                 break;
@@ -184,19 +199,19 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
             case MotionEvent.ACTION_MOVE: {
                 if (event.getPointerCount() == 1) {
-                    float adjustedX = (event.getX() - translateX) - ballRadius;
-                    float adjustedY = (event.getY() - translateY) - ballRadius;
+                    float adjustedX = (event.getX() - previousTranslateX) - ballRadius;
+                    float adjustedY = (event.getY() - previousTranslateY) - ballRadius;
                     if (adjustedX <= ballX + ballRadius
                             && adjustedX >= ballX - ballRadius
                             && adjustedY <= ballY + ballRadius
                             && adjustedY >= ballY - ballRadius) {
-                        ballX = (int) adjustedX - ballRadius;
-                        ballY = (int) adjustedY - ballRadius;
+                        ballX = (int) adjustedX;
+                        ballY = (int) adjustedY;
                     }
                     for (Limb l : body.all) {
                         if (l.containsPoints(adjustedX, adjustedY)) {
-                            l.setX((int) adjustedX - ballRadius);
-                            l.setY((int) adjustedY - ballRadius);
+                            l.setX((int) adjustedX);
+                            l.setY((int) adjustedY);
                         }
                     }
                 }
@@ -256,11 +271,11 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         Paint translucent = new Paint();
         translucent.setColor(Color.BLACK);
         translucent.setAlpha(90);
-        canvas.drawCircle(ballX / scaleFactor, ballY / scaleFactor, ballRadius, translucent);
+        canvas.drawCircle(ballX, ballY, ballRadius, translucent);
 
         // draw limbs
         for (Limb l : body.all) {
-            canvas.drawCircle(l.posX / scaleFactor, l.posY / scaleFactor, l.radius, l.color);
+            canvas.drawCircle(l.posX, l.posY, l.radius, l.color);
         }
 
         canvas.restore();
@@ -422,10 +437,10 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             rF.setAlpha(90);
 
             return new Climber(
-                    new Limb(ballRadius, lH, ballRadius * 1, ballRadius),
-                    new Limb(ballRadius, rH, ballRadius * 2, ballRadius),
-                    new Limb(ballRadius, lF, ballRadius * 3, ballRadius),
-                    new Limb(ballRadius, rF, ballRadius * 4, ballRadius)
+                    new Limb(ballRadius, lH, ballRadius * 2, ballRadius*2),
+                    new Limb(ballRadius, rH, ballRadius * 3, ballRadius*2),
+                    new Limb(ballRadius, lF, ballRadius * 4, ballRadius*2),
+                    new Limb(ballRadius, rF, ballRadius * 5, ballRadius*2)
             );
         }
     }
