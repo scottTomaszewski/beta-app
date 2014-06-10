@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,8 +37,60 @@ public class SurfaceViewActivity extends Activity {
         buttons.findViewById(R.id.rightHand).setOnClickListener(new LimbHelper(LimbEnum.RIGHT_HAND, ball));
         buttons.findViewById(R.id.leftFoot).setOnClickListener(new LimbHelper(LimbEnum.LEFT_FOOT, ball));
         buttons.findViewById(R.id.rightFoot).setOnClickListener(new LimbHelper(LimbEnum.RIGHT_FOOT, ball));
+        buttons.findViewById(R.id.commit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         layout.addView(buttons);
         setContentView(layout);
+    }
+}
+
+class Position {
+    final int x;
+    final int y;
+
+    Position(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class Body {
+    final Position leftHand;
+    final Position rightHand;
+    final Position leftFoot;
+    final Position rightFoot;
+    final List<Position> all;
+
+    static Body fromClimber(Climber c) {
+        return new Body(
+                new Position(c.leftHand.posX, c.leftHand.posY),
+                new Position(c.rightHand.posX, c.rightHand.posY),
+                new Position(c.leftFoot.posX, c.leftFoot.posY),
+                new Position(c.rightFoot.posX, c.rightFoot.posY)
+        );
+    }
+
+    Body(Position leftHand, Position rightHand, Position leftFoot, Position rightFoot) {
+        this.leftHand = leftHand;
+        this.rightHand = rightHand;
+        this.leftFoot = leftFoot;
+        this.rightFoot = rightFoot;
+        this.all = Arrays.asList(leftHand, rightHand, leftFoot, rightFoot);
+    }
+}
+
+class History {
+    private final List<Body> positions = new ArrayList<>();
+    void push(Body nextMove) {
+        positions.add(nextMove);
+    }
+
+    Body last() {
+        return positions.get(positions.size()-1);
     }
 }
 
@@ -45,7 +98,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     private static final int NONE = 0;
     private static final int DRAG = 1;
     private static final int ZOOM = 2;
-    private static final int ballRadius = 20;
+    static final int ballRadius = 20;
 
     GameThread thread;
     int screenW; //Device's screen width.
@@ -372,83 +425,83 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             return true;
         }
     }
+}
 
-    private static final class Limb {
-        final int radius;
-        final Paint color;
-        final LimbEnum id;
+final class Limb {
+    final int radius;
+    final Paint color;
+    final LimbEnum id;
 
-        // position is mutable so it can move
-        private int posX;
-        private int posY;
+    // position is mutable so it can move
+    int posX;
+    int posY;
 
-        private Limb(LimbEnum id, int radius, Paint color, int posX, int posY) {
-            this.id = id;
-            this.radius = radius;
-            this.color = color;
-            this.posX = posX;
-            this.posY = posY;
-        }
-
-        void setX(int x) {
-            this.posX = x;
-        }
-
-        void setY(int y) {
-            this.posY = y;
-        }
-
-        boolean containsPoints(float x, float y) {
-            return x <= posX + ballRadius && x >= posX - ballRadius
-                    && y <= posY + ballRadius && y >= posY - ballRadius;
-
-        }
+    Limb(LimbEnum id, int radius, Paint color, int posX, int posY) {
+        this.id = id;
+        this.radius = radius;
+        this.color = color;
+        this.posX = posX;
+        this.posY = posY;
     }
 
-    private static final class Climber {
-        final Limb leftHand;
-        final Limb rightHand;
-        final Limb leftFoot;
-        final Limb rightFoot;
-        final List<Limb> all;
+    void setX(int x) {
+        this.posX = x;
+    }
 
-        private Climber(Limb leftHand, Limb rightHand, Limb leftFoot, Limb rightFoot) {
-            this.leftHand = leftHand;
-            this.rightHand = rightHand;
-            this.leftFoot = leftFoot;
-            this.rightFoot = rightFoot;
-            all = Arrays.asList(leftHand, rightHand, leftFoot, rightFoot);
-        }
+    void setY(int y) {
+        this.posY = y;
+    }
 
-        static Climber standard() {
-            // left hand
-            Paint lH = new Paint();
-            lH.setAntiAlias(true);
-            lH.setColor(Color.RED);
-            lH.setAlpha(90);
-            // right hand
-            Paint rH = new Paint();
-            rH.setAntiAlias(true);
-            rH.setColor(Color.BLUE);
-            rH.setAlpha(90);
-            // left foot
-            Paint lF = new Paint();
-            lF.setAntiAlias(true);
-            lF.setColor(Color.YELLOW);
-            lF.setAlpha(90);
-            // right foot
-            Paint rF = new Paint();
-            rF.setAntiAlias(true);
-            rF.setColor(Color.GREEN);
-            rF.setAlpha(90);
+    boolean containsPoints(float x, float y) {
+        return x <= posX + BallBounces.ballRadius && x >= posX - BallBounces.ballRadius
+                && y <= posY + BallBounces.ballRadius && y >= posY - BallBounces.ballRadius;
 
-            return new Climber(
-                    new Limb(LimbEnum.LEFT_HAND, ballRadius, lH, ballRadius * 8, ballRadius * 2),
-                    new Limb(LimbEnum.RIGHT_HAND, ballRadius, rH, ballRadius * 10, ballRadius * 2),
-                    new Limb(LimbEnum.LEFT_FOOT, ballRadius, lF, ballRadius * 4, ballRadius * 2),
-                    new Limb(LimbEnum.RIGHT_FOOT, ballRadius, rF, ballRadius * 6, ballRadius * 2)
-            );
-        }
+    }
+}
+
+final class Climber {
+    final Limb leftHand;
+    final Limb rightHand;
+    final Limb leftFoot;
+    final Limb rightFoot;
+    final List<Limb> all;
+
+    private Climber(Limb leftHand, Limb rightHand, Limb leftFoot, Limb rightFoot) {
+        this.leftHand = leftHand;
+        this.rightHand = rightHand;
+        this.leftFoot = leftFoot;
+        this.rightFoot = rightFoot;
+        all = Arrays.asList(leftHand, rightHand, leftFoot, rightFoot);
+    }
+
+    static Climber standard() {
+        // left hand
+        Paint lH = new Paint();
+        lH.setAntiAlias(true);
+        lH.setColor(Color.RED);
+        lH.setAlpha(90);
+        // right hand
+        Paint rH = new Paint();
+        rH.setAntiAlias(true);
+        rH.setColor(Color.BLUE);
+        rH.setAlpha(90);
+        // left foot
+        Paint lF = new Paint();
+        lF.setAntiAlias(true);
+        lF.setColor(Color.YELLOW);
+        lF.setAlpha(90);
+        // right foot
+        Paint rF = new Paint();
+        rF.setAntiAlias(true);
+        rF.setColor(Color.GREEN);
+        rF.setAlpha(90);
+
+        return new Climber(
+                new Limb(LimbEnum.LEFT_HAND, BallBounces.ballRadius, lH, BallBounces.ballRadius * 8, BallBounces.ballRadius * 2),
+                new Limb(LimbEnum.RIGHT_HAND, BallBounces.ballRadius, rH, BallBounces.ballRadius * 10, BallBounces.ballRadius * 2),
+                new Limb(LimbEnum.LEFT_FOOT, BallBounces.ballRadius, lF, BallBounces.ballRadius * 4, BallBounces.ballRadius * 2),
+                new Limb(LimbEnum.RIGHT_FOOT, BallBounces.ballRadius, rF, BallBounces.ballRadius * 6, BallBounces.ballRadius * 2)
+        );
     }
 }
 
