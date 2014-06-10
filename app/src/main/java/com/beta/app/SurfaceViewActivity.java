@@ -267,7 +267,12 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         // draw limbs
         for (Limb l : body.all) {
             if (l.id == selectedLimb) {
-                canvas.drawCircle(l.posX, l.posY, l.radius * 2, l.color);
+                Paint border = new Paint();
+                border.setColor(Color.WHITE);
+                border.setAntiAlias(true);
+                border.setAlpha(150);
+                canvas.drawCircle(l.posX, l.posY, (int) (l.radius * 1.25), border);
+                canvas.drawCircle(l.posX, l.posY, l.radius, l.color);
             } else {
                 canvas.drawCircle(l.posX, l.posY, l.radius, l.color);
             }
