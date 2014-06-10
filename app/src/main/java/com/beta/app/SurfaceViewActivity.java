@@ -204,7 +204,8 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 float adjustedY = event.getY() - previousTranslateY - ballRadius;
 
                 for (Limb l : body.all) {
-                    if (l.containsPoints(adjustedX / scaleFactor, adjustedY / scaleFactor)) {
+                    if (l.containsPoints(adjustedX / scaleFactor, adjustedY / scaleFactor)
+                            || l.id == selectedLimb) {
                         l.setX((int) (adjustedX / scaleFactor));
                         l.setY((int) (adjustedY / scaleFactor));
                     }
@@ -219,7 +220,8 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                     float adjustedX = (event.getX() - previousTranslateX) - ballRadius;
                     float adjustedY = (event.getY() - previousTranslateY) - ballRadius;
                     for (Limb l : body.all) {
-                        if (l.containsPoints(adjustedX / scaleFactor, adjustedY / scaleFactor)) {
+                        if (l.containsPoints(adjustedX / scaleFactor, adjustedY / scaleFactor)
+                                || l.id == selectedLimb) {
                             l.setX((int) (adjustedX / scaleFactor));
                             l.setY((int) (adjustedY / scaleFactor));
                         }
@@ -280,7 +282,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         // draw limbs
         for (Limb l : body.all) {
             if (l.id == selectedLimb) {
-                canvas.drawCircle(l.posX, l.posY, l.radius*2, l.color);
+                canvas.drawCircle(l.posX, l.posY, l.radius * 2, l.color);
             } else {
                 canvas.drawCircle(l.posX, l.posY, l.radius, l.color);
             }
@@ -326,7 +328,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     void setLimbSelected(LimbEnum toSet) {
         selectedLimb = toSet;
     }
-
 
 
     class GameThread extends Thread {
@@ -459,6 +460,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 }
+
 enum LimbEnum {
     LEFT_HAND, RIGHT_HAND, LEFT_FOOT, RIGHT_FOOT, NONE;
 }
