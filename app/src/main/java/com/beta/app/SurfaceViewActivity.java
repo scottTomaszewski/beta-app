@@ -9,10 +9,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import java.util.Arrays;
 import java.util.List;
@@ -24,7 +28,10 @@ public class SurfaceViewActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ball = new BallBounces(this);
-        setContentView(ball);
+        RelativeLayout layout = new RelativeLayout(this);
+        layout.addView(ball);
+        layout.addView(LayoutInflater.from(this).inflate(R.layout.fragment_selectors, layout, false));
+        setContentView(layout);
     }
 }
 
