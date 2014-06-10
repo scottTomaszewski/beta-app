@@ -37,8 +37,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     GameThread thread;
     int screenW; //Device's screen width.
     int screenH; //Device's screen height.
-    int ballX; //Ball x position.
-    int ballY; //Ball y position.
     int initialY;
     int bgrW;
     int bgrH;
@@ -113,9 +111,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         bgr = Bitmap.createScaledBitmap(bgr, w, bgr.getHeight() * ratio, true); //Scale background to fit the screen.
         bgrW = bgr.getWidth();
         bgrH = bgr.getHeight();
-
-        ballX = (int) (screenW / 2) - ballRadius; //Centre ball X into the centre of the screen.
-        ballY = 50; //Centre ball height above the screen.
     }
 
     @Override
@@ -178,14 +173,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 float adjustedX = event.getX() - previousTranslateX - ballRadius;
                 float adjustedY = event.getY() - previousTranslateY - ballRadius;
 
-                if (adjustedX <= ballX + ballRadius
-                        && adjustedX >= ballX - ballRadius
-                        && adjustedY <= ballY + ballRadius
-                        && adjustedY >= ballY - ballRadius) {
-                    ballX = (int) adjustedX;
-                    ballY = (int) adjustedY;
-                }
-
                 for (Limb l : body.all) {
                     if (l.containsPoints(adjustedX/scaleFactor, adjustedY/scaleFactor)) {
                         l.setX((int) (adjustedX/scaleFactor));
@@ -201,13 +188,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 if (event.getPointerCount() == 1) {
                     float adjustedX = (event.getX() - previousTranslateX) - ballRadius;
                     float adjustedY = (event.getY() - previousTranslateY) - ballRadius;
-                    if (adjustedX <= ballX + ballRadius
-                            && adjustedX >= ballX - ballRadius
-                            && adjustedY <= ballY + ballRadius
-                            && adjustedY >= ballY - ballRadius) {
-                        ballX = (int) adjustedX;
-                        ballY = (int) adjustedY;
-                    }
                     for (Limb l : body.all) {
                         if (l.containsPoints(adjustedX/scaleFactor, adjustedY/scaleFactor)) {
                             l.setX((int) (adjustedX/scaleFactor));
@@ -266,12 +246,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawColor(Color.BLACK);
         Rect r = new Rect(0, 0, bgrW, bgrH);
         canvas.drawBitmap(bgr, r, r, null);
-
-        // draw ball
-        Paint translucent = new Paint();
-        translucent.setColor(Color.BLACK);
-        translucent.setAlpha(90);
-        canvas.drawCircle(ballX, ballY, ballRadius, translucent);
 
         // draw limbs
         for (Limb l : body.all) {
