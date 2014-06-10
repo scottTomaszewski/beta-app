@@ -45,10 +45,10 @@ public class SurfaceViewActivity extends Activity {
                 history.push(Body.fromClimber(ball.body));
             }
         });
-        buttons.findViewById(R.id.last).setOnClickListener(new View.OnClickListener() {
+        buttons.findViewById(R.id.back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ball.setState(history.last());
+                ball.setState(history.back());
             }
         });
         layout.addView(buttons);
@@ -93,12 +93,20 @@ class Body {
 
 class History {
     private final List<Body> positions = new ArrayList<>();
+
+    private int currIndex = 0;
+
     void push(Body nextMove) {
         positions.add(nextMove);
+        currIndex = positions.size()-1;
     }
 
-    Body last() {
-        return positions.get(positions.size()-1);
+    Body back() {
+        if (currIndex != 0) {
+            currIndex--;
+            return positions.get(currIndex);
+        }
+        return positions.get(0);
     }
 }
 
