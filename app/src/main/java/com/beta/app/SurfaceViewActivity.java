@@ -2,6 +2,7 @@ package com.beta.app;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -30,8 +31,28 @@ public class SurfaceViewActivity extends Activity {
         ball = new BallBounces(this);
         RelativeLayout layout = new RelativeLayout(this);
         layout.addView(ball);
-        layout.addView(LayoutInflater.from(this).inflate(R.layout.fragment_selectors, layout, false));
+        View buttons = LayoutInflater.from(this).inflate(R.layout.fragment_selectors, layout, false);
+        buttons.findViewById(R.id.leftHand).setOnClickListener(new LimbHelper(LimbEnum.LEFT_HAND, ball));
+        buttons.findViewById(R.id.rightHand).setOnClickListener(new LimbHelper(LimbEnum.RIGHT_HAND, ball));
+        buttons.findViewById(R.id.leftFoot).setOnClickListener(new LimbHelper(LimbEnum.LEFT_FOOT, ball));
+        buttons.findViewById(R.id.rightFoot).setOnClickListener(new LimbHelper(LimbEnum.RIGHT_FOOT, ball));
+        layout.addView(buttons);
         setContentView(layout);
+    }
+}
+
+class LimbHelper implements View.OnClickListener {
+    private final LimbEnum l;
+    private final BallBounces route;
+
+    LimbHelper(LimbEnum l, BallBounces route) {
+        this.l = l;
+        this.route = route;
+    }
+
+    @Override
+    public void onClick(View view) {
+        route.setLimbSelected(l);
     }
 }
 
@@ -90,6 +111,8 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     private float previousTranslateY = 0f;
 
     private final Climber body = Climber.standard();
+
+    private LimbEnum selectedLimb;
 
     public BallBounces(Context context) {
         super(context);
@@ -181,9 +204,9 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 float adjustedY = event.getY() - previousTranslateY - ballRadius;
 
                 for (Limb l : body.all) {
-                    if (l.containsPoints(adjustedX/scaleFactor, adjustedY/scaleFactor)) {
-                        l.setX((int) (adjustedX/scaleFactor));
-                        l.setY((int) (adjustedY/scaleFactor));
+                    if (l.containsPoints(adjustedX / scaleFactor, adjustedY / scaleFactor)) {
+                        l.setX((int) (adjustedX / scaleFactor));
+                        l.setY((int) (adjustedY / scaleFactor));
                     }
                 }
 
@@ -196,9 +219,9 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                     float adjustedX = (event.getX() - previousTranslateX) - ballRadius;
                     float adjustedY = (event.getY() - previousTranslateY) - ballRadius;
                     for (Limb l : body.all) {
-                        if (l.containsPoints(adjustedX/scaleFactor, adjustedY/scaleFactor)) {
-                            l.setX((int) (adjustedX/scaleFactor));
-                            l.setY((int) (adjustedY/scaleFactor));
+                        if (l.containsPoints(adjustedX / scaleFactor, adjustedY / scaleFactor)) {
+                            l.setX((int) (adjustedX / scaleFactor));
+                            l.setY((int) (adjustedY / scaleFactor));
                         }
                     }
                 }
@@ -256,7 +279,11 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
         // draw limbs
         for (Limb l : body.all) {
-            canvas.drawCircle(l.posX, l.posY, l.radius, l.color);
+            if (l.id == selectedLimb) {
+                canvas.drawCircle(l.posX, l.posY, l.radius*2, l.color);
+            } else {
+                canvas.drawCircle(l.posX, l.posY, l.radius, l.color);
+            }
         }
 
         canvas.restore();
@@ -295,6 +322,11 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
+
+    void setLimbSelected(LimbEnum toSet) {
+        selectedLimb = toSet;
+    }
+
 
 
     class GameThread extends Thread {
@@ -356,12 +388,14 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     private static final class Limb {
         final int radius;
         final Paint color;
+        final LimbEnum id;
 
         // position is mutable so it can move
         private int posX;
         private int posY;
 
-        private Limb(int radius, Paint color, int posX, int posY) {
+        private Limb(LimbEnum id, int radius, Paint color, int posX, int posY) {
+            this.id = id;
             this.radius = radius;
             this.color = color;
             this.posX = posX;
@@ -417,11 +451,14 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             rF.setAlpha(90);
 
             return new Climber(
-                    new Limb(ballRadius, lH, ballRadius * 8, ballRadius*2),
-                    new Limb(ballRadius, rH, ballRadius * 10, ballRadius*2),
-                    new Limb(ballRadius, lF, ballRadius * 4, ballRadius*2),
-                    new Limb(ballRadius, rF, ballRadius * 6, ballRadius*2)
+                    new Limb(LimbEnum.LEFT_HAND, ballRadius, lH, ballRadius * 8, ballRadius * 2),
+                    new Limb(LimbEnum.RIGHT_HAND, ballRadius, rH, ballRadius * 10, ballRadius * 2),
+                    new Limb(LimbEnum.LEFT_FOOT, ballRadius, lF, ballRadius * 4, ballRadius * 2),
+                    new Limb(LimbEnum.RIGHT_FOOT, ballRadius, rF, ballRadius * 6, ballRadius * 2)
             );
         }
     }
+}
+enum LimbEnum {
+    LEFT_HAND, RIGHT_HAND, LEFT_FOOT, RIGHT_FOOT, NONE;
 }
