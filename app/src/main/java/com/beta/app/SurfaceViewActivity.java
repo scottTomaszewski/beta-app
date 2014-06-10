@@ -25,11 +25,13 @@ import java.util.List;
 
 public class SurfaceViewActivity extends Activity {
     BallBounces ball;
+    private History history;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ball = new BallBounces(this);
+        history = new History();
         RelativeLayout layout = new RelativeLayout(this);
         layout.addView(ball);
         View buttons = LayoutInflater.from(this).inflate(R.layout.fragment_selectors, layout, false);
@@ -40,7 +42,7 @@ public class SurfaceViewActivity extends Activity {
         buttons.findViewById(R.id.commit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                history.push(Body.fromClimber(ball.body));
             }
         });
         layout.addView(buttons);
@@ -148,7 +150,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     private float previousTranslateX = 0f;
     private float previousTranslateY = 0f;
 
-    private final Climber body = Climber.standard();
+    final Climber body = Climber.standard();
 
     LimbEnum selectedLimb;
 
