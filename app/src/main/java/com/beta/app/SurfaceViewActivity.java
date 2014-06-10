@@ -416,18 +416,22 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         static Climber standard() {
             // left hand
             Paint lH = new Paint();
+            lH.setAntiAlias(true);
             lH.setColor(Color.RED);
             lH.setAlpha(90);
             // right hand
             Paint rH = new Paint();
+            rH.setAntiAlias(true);
             rH.setColor(Color.BLUE);
             rH.setAlpha(90);
             // left foot
             Paint lF = new Paint();
+            lF.setAntiAlias(true);
             lF.setColor(Color.YELLOW);
             lF.setAlpha(90);
             // right foot
             Paint rF = new Paint();
+            rF.setAntiAlias(true);
             rF.setColor(Color.GREEN);
             rF.setAlpha(90);
 
