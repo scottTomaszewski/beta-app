@@ -41,25 +41,6 @@ public class SurfaceViewActivity extends Activity {
     }
 }
 
-class LimbHelper implements View.OnClickListener {
-    private final LimbEnum l;
-    private final BallBounces route;
-
-    LimbHelper(LimbEnum l, BallBounces route) {
-        this.l = l;
-        this.route = route;
-    }
-
-    @Override
-    public void onClick(View view) {
-        if (route.selectedLimb == l) {
-            route.selectedLimb = LimbEnum.NONE;
-        } else {
-            route.selectedLimb = l;
-        }
-    }
-}
-
 class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     private static final int NONE = 0;
     private static final int DRAG = 1;
@@ -456,6 +437,25 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                     new Limb(LimbEnum.LEFT_FOOT, ballRadius, lF, ballRadius * 4, ballRadius * 2),
                     new Limb(LimbEnum.RIGHT_FOOT, ballRadius, rF, ballRadius * 6, ballRadius * 2)
             );
+        }
+    }
+}
+
+class LimbHelper implements View.OnClickListener {
+    private final LimbEnum l;
+    private final BallBounces route;
+
+    LimbHelper(LimbEnum l, BallBounces route) {
+        this.l = l;
+        this.route = route;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (route.selectedLimb == l) {
+            route.selectedLimb = LimbEnum.NONE;
+        } else {
+            route.selectedLimb = l;
         }
     }
 }
