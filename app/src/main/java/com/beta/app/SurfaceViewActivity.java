@@ -108,6 +108,14 @@ class History {
         }
         return positions.get(0);
     }
+
+    Body next() {
+        if (currIndex != positions.size()-1) {
+            currIndex++;
+            return positions.get(currIndex);
+        }
+        return positions.get(positions.size()-1);
+    }
 }
 
 class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
