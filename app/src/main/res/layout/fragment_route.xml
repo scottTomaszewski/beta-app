@@ -17,8 +17,8 @@
         android:layout_alignParentEnd="true" />
 
     <com.beta.app.TouchImageView
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/routeImg"
         android:src="@drawable/wall1" />
 

@@ -45,6 +45,12 @@ public class SurfaceViewActivity extends Activity {
                 history.push(Body.fromClimber(ball.body));
             }
         });
+        buttons.findViewById(R.id.last).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ball.setState(history.last());
+            }
+        });
         layout.addView(buttons);
         setContentView(layout);
     }
@@ -370,6 +376,20 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             } catch (InterruptedException e) {
             }
         }
+    }
+
+    public void setState(Body b) {
+        this.body.leftHand.posX = b.leftHand.x;
+        this.body.leftHand.posY = b.leftHand.y;
+
+        this.body.rightHand.posX = b.rightHand.x;
+        this.body.rightHand.posY = b.rightHand.y;
+
+        this.body.leftFoot.posX = b.leftFoot.x;
+        this.body.leftFoot.posY = b.leftFoot.y;
+
+        this.body.rightFoot.posX = b.rightFoot.x;
+        this.body.rightFoot.posY = b.rightFoot.y;
     }
 
     class GameThread extends Thread {
